@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kahwa House — Coffee, Slowly Made</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Caveat:wght@600;700&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav" aria-label="Primary">
+    <div class="nav__brand">Kahwa <span class="nav__brand-accent">House</span></div>
+    <ul class="nav__links">
+      <li><a class="nav__link" href="#menu">Menu</a></li>
+      <li><a class="nav__link" href="#about">About</a></li>
+      <li><a class="nav__link" href="#hours">Hours</a></li>
+      <li><a class="nav__link" href="#location">Location</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="home" aria-label="Introduction">
+    <div class="hero__text">
+      <h1 class="hero__title">
+        <span class="hero__tagline tagline">roasted slow, poured slower</span>
+        A quiet cup<br>of <em class="hero__title-em">something warm.</em>
+      </h1>
+      <p class="hero__desc">Kahwa House is a small corner of Lahore where the beans are roasted in-house, the milk is steamed to order, and no one rushes you out the door.</p>
+      <div class="btn-row">
+        <a href="#menu" class="btn btn--primary">View Menu</a>
+        <a href="#location" class="btn btn--outline">Find Us</a>
+      </div>
+    </div>
+    <div class="hero__visual">
+      <div class="hero__ring" aria-hidden="true"></div>
+      <img
+        class="hero__cup-img"
+        src="https://www.citypng.com/public/uploads/preview/front-view-of-coffee-cup-and-saucer-hd-transparent-png-701751711469033srcwqfizdc.png"
+        alt="Coffee cup and saucer"
+        width="500"
+        height="600"
+        loading="eager">
+      <div class="hero__steam hero__steam--1" aria-hidden="true"></div>
+      <div class="hero__steam hero__steam--2" aria-hidden="true"></div>
+      <div class="hero__steam hero__steam--3" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- MENU HIGHLIGHTS -->
+  <section class="section menu" id="menu" aria-labelledby="menu-heading">
+    <div class="section__head">
+      <span class="section__tagline tagline">what's brewing</span>
+      <h2 class="section__title" id="menu-heading">Menu Highlights</h2>
+      <div class="section__divider"></div>
+    </div>
+    <div class="menu__grid">
+      <article class="menu__card">
+        <div class="menu__icon" aria-hidden="true">E</div>
+        <div class="menu__row"><h3 class="menu__name">Espresso</h3><span class="menu__price">Rs. 350</span></div>
+        <p class="menu__desc">Double shot, dark and unapologetic. The one that starts the day.</p>
+      </article>
+      <article class="menu__card">
+        <div class="menu__icon" aria-hidden="true">L</div>
+        <div class="menu__row"><h3 class="menu__name">Maroon Latte</h3><span class="menu__price">Rs. 520</span></div>
+        <p class="menu__desc">Our signature — espresso, steamed milk, and a whisper of cardamom.</p>
+      </article>
+      <article class="menu__card">
+        <div class="menu__icon" aria-hidden="true">K</div>
+        <div class="menu__row"><h3 class="menu__name">Desi Kahwa</h3><span class="menu__price">Rs. 300</span></div>
+        <p class="menu__desc">Green tea, saffron, and crushed almonds, served the old way.</p>
+      </article>
+      <article class="menu__card">
+        <div class="menu__icon" aria-hidden="true">C</div>
+        <div class="menu__row"><h3 class="menu__name">Cold Brew</h3><span class="menu__price">Rs. 480</span></div>
+        <p class="menu__desc">Steeped for eighteen hours, served over ice with orange peel.</p>
+      </article>
+      <article class="menu__card">
+        <div class="menu__icon" aria-hidden="true">M</div>
+        <div class="menu__row"><h3 class="menu__name">Mocha</h3><span class="menu__price">Rs. 550</span></div>
+        <p class="menu__desc">Dark chocolate and espresso, topped with a dusting of cocoa.</p>
+      </article>
+      <article class="menu__card">
+        <div class="menu__icon" aria-hidden="true">P</div>
+        <div class="menu__row"><h3 class="menu__name">Baked Croissant</h3><span class="menu__price">Rs. 400</span></div>
+        <p class="menu__desc">Flaky, buttery, baked every morning at six. Pairs with anything above.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section about" id="about" aria-labelledby="about-heading">
+    <div class="about__visual">
+      <p class="about__quote">"We don't do fast coffee. We do coffee that's worth the wait."</p>
+    </div>
+    <div class="about__text">
+      <span class="about__tagline tagline">our story</span>
+      <h2 class="about__title" id="about-heading">About Kahwa House</h2>
+      <p class="about__desc">Kahwa House opened in 2021 as a two-table nook with one roaster and a stubborn belief: coffee should taste like it was made by someone who cares. Five years on, that hasn't changed.</p>
+      <p class="about__desc">Every bean is sourced from small growers, roasted in small batches, and pulled to order — never sitting, never rushed. The maroon booths and cream walls are meant to feel like someone's front room, because that's exactly what we wanted to build.</p>
+      <div class="about__stats">
+        <div class="about__stat"><span class="about__stat-num">5+</span><span class="about__stat-label">Years Brewing</span></div>
+        <div class="about__stat"><span class="about__stat-num">12</span><span class="about__stat-label">House Blends</span></div>
+        <div class="about__stat"><span class="about__stat-num">40k+</span><span class="about__stat-label">Cups Poured</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOURS -->
+  <section class="section hours" id="hours" aria-labelledby="hours-heading">
+    <div class="section__head">
+      <span class="section__tagline tagline">when to visit</span>
+      <h2 class="section__title" id="hours-heading">Opening Hours</h2>
+      <div class="section__divider"></div>
+    </div>
+    <div class="hours__table">
+      <div class="hours__row"><span class="hours__day">Monday – Thursday</span><span class="hours__time">8:00 AM – 10:00 PM</span></div>
+      <div class="hours__row hours__row--today"><span class="hours__day">Friday</span><span class="hours__time">2:00 PM – 11:00 PM</span></div>
+      <div class="hours__row"><span class="hours__day">Saturday</span><span class="hours__time">9:00 AM – 11:00 PM</span></div>
+      <div class="hours__row"><span class="hours__day">Sunday</span><span class="hours__time">9:00 AM – 10:00 PM</span></div>
+    </div>
+    <p class="hours__note">Kitchen closes 30 minutes before last call.</p>
+  </section>
+
+  <!-- LOCATION -->
+  <section class="section location" id="location" aria-labelledby="location-heading">
+    <div class="location__info">
+      <span class="location__tagline tagline">find your way here</span>
+      <h2 class="location__title" id="location-heading">Location</h2>
+      <address class="location__address" style="font-style:normal;">
+        <div class="location__item">
+          <div class="location__mark" aria-hidden="true">A</div>
+          <div><h3 class="location__label">Address</h3><p class="location__value">14-B Gulberg Main Boulevard, Lahore, Punjab</p></div>
+        </div>
+        <div class="location__item">
+          <div class="location__mark" aria-hidden="true">T</div>
+          <div><h3 class="location__label">Phone</h3><p class="location__value"><a class="location__link" href="tel:+923001234567">+92 300 1234567</a></p></div>
+        </div>
+        <div class="location__item">
+          <div class="location__mark" aria-hidden="true">@</div>
+          <div><h3 class="location__label">Email</h3><p class="location__value"><a class="location__link" href="mailto:hello@kahwahouse.pk">hello@kahwahouse.pk</a></p></div>
+        </div>
+        <div class="location__item">
+          <div class="location__mark" aria-hidden="true">P</div>
+          <div><h3 class="location__label">Parking</h3><p class="location__value">Street parking available; valet on weekends</p></div>
+        </div>
+      </address>
+    </div>
+    <div class="location__map" role="img" aria-label="Map showing Kahwa House location in Gulberg, Lahore">
+      <div class="location__pin" aria-hidden="true"></div>
+      <span class="location__map-label" aria-hidden="true">you are (almost) here</span>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p><strong class="footer__brand">Kahwa House</strong> · 14-B Gulberg Main Boulevard, Lahore</p>
+  <p>&copy; 2026 Kahwa House. Made with slow mornings in mind.</p>
+</footer>
+
+</body>
+</html>
