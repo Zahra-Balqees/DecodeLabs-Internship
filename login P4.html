@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>General Knowledge Quiz</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #111111;
+    --card-bg: #ffffff;
+    --card-border: #111111;
+    --option-bg: #ffffff;
+    --option-border: #111111;
+    --option-hover-bg: #111111;
+    --option-hover-fg: #ffffff;
+    --option-selected-bg: #111111;
+    --option-selected-fg: #ffffff;
+    --accent: #111111;
+    --muted: #555555;
+    --track-bg: #e6e6e6;
+    --track-fill: #111111;
+    --error: #b3261e;
+    --success: #1a7a3e;
+  }
+
+  [data-theme="dark"] {
+    --bg: #050b18;
+    --fg: #eaf1ff;
+    --card-bg: #0b1730;
+    --card-border: #1e63ff;
+    --option-bg: #0b1730;
+    --option-border: #1e63ff;
+    --option-hover-bg: #1e63ff;
+    --option-hover-fg: #050b18;
+    --option-selected-bg: #1e63ff;
+    --option-selected-fg: #050b18;
+    --accent: #1e63ff;
+    --muted: #7d93c4;
+    --track-bg: #101d3d;
+    --track-fill: #1e63ff;
+    --error: #ff6b6b;
+    --success: #4ad48a;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Courier New', Courier, monospace;
+    transition: background 0.35s ease, color 0.35s ease;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 620px;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    border-bottom: 3px solid var(--fg);
+    padding-bottom: 14px;
+  }
+
+  .brand { display: flex; flex-direction: column; gap: 2px; }
+  .brand .tag { font-size: 11px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
+  .brand h1 { margin: 0; font-size: 26px; letter-spacing: -0.5px; }
+
+  .header-actions { display: flex; gap: 8px; }
+
+  .toggle-btn {
+    border: 2px solid var(--fg);
+    background: transparent;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.25s ease, color 0.25s ease;
+    white-space: nowrap;
+  }
+  .toggle-btn:hover { background: var(--fg); color: var(--bg); }
+
+  .card {
+    border: 2px solid var(--card-border);
+    background: var(--card-bg);
+    padding: 30px 26px;
+  }
+
+  /* ---------- Auth screen ---------- */
+  #authScreen { max-width: 460px; margin: 0 auto; }
+
+  .tabs { display: flex; margin-bottom: 24px; border: 2px solid var(--fg); }
+  .tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 12px 8px;
+    cursor: pointer;
+  }
+  .tab-btn.is-active { background: var(--fg); color: var(--bg); }
+  .tab-btn:not(:last-child) { border-right: 2px solid var(--fg); }
+
+  .panel { display: none; }
+  .panel.is-active { display: block; }
+
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .field input {
+    width: 100%;
+    border: 2px solid var(--option-border);
+    background: var(--option-bg);
+    color: var(--fg);
+    font-family: inherit;
+    font-size: 15px;
+    padding: 12px 14px;
+  }
+  .field input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .pw-row { position: relative; }
+  .pw-row input { padding-right: 60px; }
+  .pw-show {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    bottom: 6px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0 8px;
+  }
+  .pw-show:hover { color: var(--fg); }
+
+  .hint { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+  .rule-list { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+  .rule-list li { font-size: 12px; color: var(--muted); }
+  .rule-list li.ok { color: var(--success); }
+  .rule-list li .mark { display: inline-block; width: 14px; }
+
+  .btn-primary {
+    width: 100%;
+    border: 2px solid var(--fg);
+    background: var(--fg);
+    color: var(--bg);
+    font-family: inherit;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 14px 16px;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: opacity 0.15s ease;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-secondary {
+    width: 100%;
+    border: 2px dashed var(--option-border);
+    background: transparent;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 12px 14px;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .btn-secondary:hover { background: var(--option-border); color: var(--bg); }
+
+  .link-row { text-align: right; margin: -8px 0 18px; }
+  .link-btn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-family: inherit;
+    font-size: 12px;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .suggest-box {
+    border: 1px solid var(--option-border);
+    padding: 12px;
+    margin: -6px 0 16px;
+    display: none;
+  }
+  .suggest-box.is-visible { display: block; }
+  .suggest-pw { font-size: 15px; letter-spacing: 1px; word-break: break-all; margin-bottom: 10px; }
+  .suggest-actions { display: flex; gap: 8px; }
+  .suggest-actions button {
+    flex: 1;
+    border: 2px solid var(--fg);
+    background: transparent;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px;
+    cursor: pointer;
+  }
+  .suggest-actions button:hover { background: var(--fg); color: var(--bg); }
+
+  .msg { font-size: 13px; padding: 10px 12px; border: 1px solid transparent; margin-bottom: 16px; display: none; }
+  .msg.is-visible { display: block; }
+  .msg.error { color: var(--error); border-color: var(--error); }
+  .msg.success { color: var(--success); border-color: var(--success); }
+
+  .back-row { margin-top: 4px; }
+
+  /* ---------- Quiz screen ---------- */
+  .progress-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .track { height: 6px; width: 100%; background: var(--track-bg); margin-bottom: 30px; position: relative; }
+  .track-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--track-fill); transition: width 0.3s ease; }
+
+  .q-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .q-number { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+  .set-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+
+  .timer-row { display: flex; align-items: center; gap: 10px; }
+  .timer-num { font-size: 13px; font-weight: bold; color: var(--accent); min-width: 34px; text-align: right; }
+  .timer-track { width: 70px; height: 6px; background: var(--track-bg); position: relative; overflow: hidden; }
+  .timer-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--accent); width: 100%; transition: width 1s linear; }
+  .timer-fill.is-urgent { background: #d94f4f; }
+
+  .q-text { font-size: 20px; line-height: 1.4; margin: 0 0 26px 0; }
+
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option {
+    border: 2px solid var(--option-border);
+    background: var(--option-bg);
+    color: var(--fg);
+    padding: 14px 16px;
+    text-align: left;
+    font-family: inherit;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  }
+  .option:hover:not(:disabled) { background: var(--option-hover-bg); color: var(--option-hover-fg); }
+  .option:active:not(:disabled) { transform: scale(0.99); }
+  .option.is-selected { background: var(--option-selected-bg); color: var(--option-selected-fg); }
+  .option:disabled { cursor: default; opacity: 0.55; }
+  .option .letter {
+    font-weight: bold;
+    border: 1px solid currentColor;
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  .next-btn {
+    margin-top: 26px;
+    width: 100%;
+    border: 2px solid var(--fg);
+    background: var(--fg);
+    color: var(--bg);
+    font-family: inherit;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 14px;
+    cursor: pointer;
+    display: none;
+  }
+  .next-btn.is-visible { display: block; }
+  .next-btn:hover { opacity: 0.85; }
+
+  .result-card { text-align: center; }
+  .result-card .headline { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .result-card .score-big { font-size: 64px; font-weight: bold; margin: 6px 0 4px 0; color: var(--accent); }
+  .result-card .score-sub { font-size: 14px; color: var(--muted); margin-bottom: 26px; }
+  .result-card .accuracy-line { font-size: 18px; margin-bottom: 28px; }
+
+  .restart-btn {
+    border: 2px solid var(--fg);
+    background: transparent;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 13px 20px;
+    cursor: pointer;
+    width: 100%;
+  }
+  .restart-btn:hover { background: var(--fg); color: var(--bg); }
+
+  .review { margin-top: 30px; text-align: left; }
+  .review-title {
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    border-bottom: 2px solid var(--fg);
+    padding-bottom: 8px;
+  }
+  .review-item { border: 2px solid var(--card-border); padding: 16px 18px; margin-bottom: 12px; }
+  .review-q { font-size: 15px; margin: 0 0 10px 0; line-height: 1.4; }
+  .review-line { font-size: 13px; margin: 4px 0; display: flex; gap: 8px; align-items: flex-start; }
+  .review-line .tag-badge {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border: 1px solid currentColor;
+    min-width: 58px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .review-line.correct { color: #2e8b57; }
+  [data-theme="dark"] .review-line.correct { color: #4fd18a; }
+  .review-line.wrong { color: #d94f4f; }
+  [data-theme="dark"] .review-line.wrong { color: #ff7a7a; }
+  .review-line.answer-key { color: var(--fg); }
+
+  footer { text-align: center; margin-top: 24px; font-size: 11px; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body data-theme="light">
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <span class="tag" id="brandTag">General Knowledge Quiz</span>
+      <h1 id="brandTitle">Account Access</h1>
+    </div>
+    <div class="header-actions">
+      <button class="toggle-btn" id="logoutBtn" type="button" style="display:none;">Log Out</button>
+      <button class="toggle-btn" id="themeToggle" type="button">Dark Mode</button>
+    </div>
+  </header>
+
+  <!-- ================= AUTH SCREEN ================= -->
+  <div id="authScreen">
+    <div class="card">
+
+      <div class="tabs" id="mainTabs">
+        <button class="tab-btn is-active" data-view="signin" type="button">Sign In</button>
+        <button class="tab-btn" data-view="signup" type="button">Sign Up</button>
+      </div>
+
+      <div class="msg" id="globalMsg"></div>
+
+      <!-- SIGN IN -->
+      <div class="panel is-active" id="panel-signin">
+        <form id="signinForm" novalidate>
+          <div class="field">
+            <label for="siEmail">Gmail Address</label>
+            <input type="email" id="siEmail" placeholder="you@gmail.com" autocomplete="username" required>
+          </div>
+          <div class="field">
+            <label for="siPassword">Password</label>
+            <div class="pw-row">
+              <input type="password" id="siPassword" placeholder="Enter your password" autocomplete="current-password" required>
+              <button type="button" class="pw-show" data-target="siPassword">Show</button>
+            </div>
+          </div>
+          <div class="link-row">
+            <button type="button" class="link-btn" id="showForgot">Forgot password?</button>
+          </div>
+          <button type="submit" class="btn-primary">Log In</button>
+        </form>
+      </div>
+
+      <!-- FORGOT PASSWORD -->
+      <div class="panel" id="panel-forgot">
+        <p class="hint" style="margin:0 0 16px;">Enter your registered Gmail address and set a new password.</p>
+        <form id="forgotForm" novalidate>
+          <div class="field">
+            <label for="fpEmail">Gmail Address</label>
+            <input type="email" id="fpEmail" placeholder="you@gmail.com" required>
+          </div>
+          <div class="field">
+            <label for="fpPassword">New Password</label>
+            <div class="pw-row">
+              <input type="password" id="fpPassword" placeholder="Create a new password" required>
+              <button type="button" class="pw-show" data-target="fpPassword">Show</button>
+            </div>
+            <ul class="rule-list" id="fpRules">
+              <li data-rule="len"><span class="mark">○</span>At least 8 characters</li>
+              <li data-rule="upper"><span class="mark">○</span>One capital letter</li>
+              <li data-rule="num"><span class="mark">○</span>One number</li>
+              <li data-rule="sym"><span class="mark">○</span>One symbol (!@#$...)</li>
+            </ul>
+          </div>
+          <button type="submit" class="btn-primary">Reset Password</button>
+          <div class="back-row">
+            <button type="button" class="link-btn" id="backToSigninFromForgot">Back to Sign In</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- SIGN UP -->
+      <div class="panel" id="panel-signup">
+        <form id="signupForm" novalidate>
+          <div class="field">
+            <label for="suEmail">Gmail Address</label>
+            <input type="email" id="suEmail" placeholder="you@gmail.com" autocomplete="username" required>
+            <div class="hint">Only a valid @gmail.com address can be used to create an account.</div>
+          </div>
+
+          <button type="button" class="btn-secondary" id="suggestBtn">Suggest a strong password</button>
+          <div class="suggest-box" id="suggestBox">
+            <div class="suggest-pw" id="suggestPwText"></div>
+            <div class="suggest-actions">
+              <button type="button" id="useSuggested">Use this password</button>
+              <button type="button" id="writeOwn">I'll write my own</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="suPassword">Password</label>
+            <div class="pw-row">
+              <input type="password" id="suPassword" placeholder="Create a password" autocomplete="new-password" required>
+              <button type="button" class="pw-show" data-target="suPassword">Show</button>
+            </div>
+            <ul class="rule-list" id="suRules">
+              <li data-rule="len"><span class="mark">○</span>At least 8 characters</li>
+              <li data-rule="upper"><span class="mark">○</span>One capital letter</li>
+              <li data-rule="num"><span class="mark">○</span>One number</li>
+              <li data-rule="sym"><span class="mark">○</span>One symbol (!@#$...)</li>
+            </ul>
+          </div>
+
+          <div class="field">
+            <label for="suConfirm">Confirm Password</label>
+            <div class="pw-row">
+              <input type="password" id="suConfirm" placeholder="Re-enter your password" autocomplete="new-password" required>
+              <button type="button" class="pw-show" data-target="suConfirm">Show</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary">Create Account</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= QUIZ SCREEN ================= -->
+  <div id="quizScreen" style="display:none;">
+    <div id="quizArea">
+      <div class="progress-row">
+        <span id="progressLabel">Question 1 of 10</span>
+        <span id="scoreLabel">Answered: 0</span>
+      </div>
+      <div class="track"><div class="track-fill" id="trackFill" style="width: 0%;"></div></div>
+
+      <div class="card" id="questionCard">
+        <div class="q-top-row">
+          <div class="q-number" id="qNumber">Q1</div>
+          <div class="timer-row">
+            <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+            <span class="timer-num" id="timerNum">10s</span>
+          </div>
+        </div>
+        <div class="set-label" id="setLabel">Set A</div>
+        <p class="q-text" id="qText"></p>
+        <div class="options" id="optionsList"></div>
+      </div>
+
+      <button class="next-btn" id="nextBtn" type="button">Next Question</button>
+    </div>
+
+    <div id="resultArea" style="display:none;">
+      <div class="card result-card">
+        <div class="headline">Quiz Complete</div>
+        <div class="score-big" id="scoreBig">0/10</div>
+        <div class="score-sub" id="scoreSub">correct answers</div>
+        <div class="accuracy-line" id="accuracyLine">Accuracy: 0%</div>
+        <button class="restart-btn" id="restartBtn" type="button">Restart Quiz</button>
+      </div>
+      <div class="review" id="reviewList">
+        <div class="review-title">Answer Key</div>
+      </div>
+    </div>
+  </div>
+
+  <footer id="quizFooter" style="display:none;">js- hooks, is- states · vanilla JS · DOM only</footer>
+</div>
+
+<script>
+  /* ============================================================
+     THEME + SCREEN SWITCHING
+     ============================================================ */
+  const themeToggle = document.getElementById('themeToggle');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const brandTag = document.getElementById('brandTag');
+  const brandTitle = document.getElementById('brandTitle');
+  const authScreen = document.getElementById('authScreen');
+  const quizScreen = document.getElementById('quizScreen');
+  const quizFooter = document.getElementById('quizFooter');
+
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    themeToggle.textContent = isDark ? 'Dark Mode' : 'Light Mode';
+  });
+
+  function goToQuizScreen() {
+    authScreen.style.display = 'none';
+    quizScreen.style.display = 'block';
+    quizFooter.style.display = 'block';
+    logoutBtn.style.display = 'inline-block';
+    brandTag.textContent = 'Project 3 · Interactive Web Elements';
+    brandTitle.textContent = 'General Knowledge Quiz';
+    pickRandomSet();
+    renderQuestion();
+  }
+
+  function goToAuthScreen() {
+    clearInterval(timerInterval);
+    quizScreen.style.display = 'none';
+    authScreen.style.display = 'block';
+    quizFooter.style.display = 'none';
+    logoutBtn.style.display = 'none';
+    brandTag.textContent = 'General Knowledge Quiz';
+    brandTitle.textContent = 'Account Access';
+    showView('signin');
+  }
+
+  logoutBtn.addEventListener('click', goToAuthScreen);
+
+  /* ============================================================
+     ACCOUNT STORAGE (demo store; a real app needs a server)
+     ============================================================ */
+  const STORE_KEY = 'quizAppAccounts';
+  let memoryAccounts = {};
+  let storageAvailable = true;
+
+  try {
+    const testKey = '__storage_test__';
+    localStorage.setItem(testKey, '1');
+    localStorage.removeItem(testKey);
+  } catch (err) {
+    storageAvailable = false;
+    console.warn('localStorage is unavailable, falling back to in-memory accounts for this session.', err);
+  }
+
+  function getAccounts() {
+    if (!storageAvailable) return memoryAccounts;
+    try {
+      return JSON.parse(localStorage.getItem(STORE_KEY)) || {};
+    } catch (err) {
+      console.warn('Failed to read accounts from localStorage.', err);
+      return memoryAccounts;
+    }
+  }
+  function saveAccounts(accounts) {
+    if (!storageAvailable) { memoryAccounts = accounts; return; }
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(accounts));
+    } catch (err) {
+      console.warn('Failed to write accounts to localStorage, using in-memory fallback.', err);
+      storageAvailable = false;
+      memoryAccounts = accounts;
+    }
+  }
+
+  /* ============================================================
+     AUTH SCREEN: view switching between Sign In / Forgot / Sign Up
+     ============================================================ */
+  const tabs = document.querySelectorAll('#mainTabs .tab-btn');
+  const panels = {
+    signin: document.getElementById('panel-signin'),
+    forgot: document.getElementById('panel-forgot'),
+    signup: document.getElementById('panel-signup')
+  };
+
+  function showView(view) {
+    Object.values(panels).forEach(p => p.classList.remove('is-active'));
+    panels[view].classList.add('is-active');
+    tabs.forEach(t => t.classList.toggle('is-active', t.dataset.view === view));
+    hideMsg();
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => showView(t.dataset.view)));
+  document.getElementById('showForgot').addEventListener('click', () => showView('forgot'));
+  document.getElementById('backToSigninFromForgot').addEventListener('click', () => showView('signin'));
+
+  const globalMsg = document.getElementById('globalMsg');
+  function showMsg(text, type) {
+    globalMsg.textContent = text;
+    globalMsg.className = 'msg is-visible ' + type;
+  }
+  function hideMsg() {
+    globalMsg.className = 'msg';
+    globalMsg.textContent = '';
+  }
+
+  document.querySelectorAll('.pw-show').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.target);
+      const isPw = input.type === 'password';
+      input.type = isPw ? 'text' : 'password';
+      btn.textContent = isPw ? 'Hide' : 'Show';
+    });
+  });
+
+  function isGmail(email) {
+    return /^[a-z0-9._%+-]+@gmail\.com$/i.test(email.trim());
+  }
+
+  function checkRules(password) {
+    return {
+      len: password.length >= 8,
+      upper: /[A-Z]/.test(password),
+      num: /[0-9]/.test(password),
+      sym: /[^A-Za-z0-9]/.test(password)
+    };
+  }
+  function passwordIsValid(password) {
+    const r = checkRules(password);
+    return r.len && r.upper && r.num && r.sym;
+  }
+  function renderRuleList(listEl, password) {
+    const r = checkRules(password);
+    listEl.querySelectorAll('li').forEach(li => {
+      const ok = r[li.dataset.rule];
+      li.classList.toggle('ok', ok);
+      li.querySelector('.mark').textContent = ok ? '✓' : '○';
+    });
+  }
+
+  const suRules = document.getElementById('suRules');
+  const suPassword = document.getElementById('suPassword');
+  suPassword.addEventListener('input', () => renderRuleList(suRules, suPassword.value));
+
+  const fpRules = document.getElementById('fpRules');
+  const fpPassword = document.getElementById('fpPassword');
+  fpPassword.addEventListener('input', () => renderRuleList(fpRules, fpPassword.value));
+
+  function generateStrongPassword(length = 14) {
+    const uppers = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    const lowers = 'abcdefghijkmnpqrstuvwxyz';
+    const nums = '23456789';
+    const symbols = '!@#$%^&*?-_';
+    const all = uppers + lowers + nums + symbols;
+
+    let pw = [
+      uppers[Math.floor(Math.random() * uppers.length)],
+      lowers[Math.floor(Math.random() * lowers.length)],
+      nums[Math.floor(Math.random() * nums.length)],
+      symbols[Math.floor(Math.random() * symbols.length)]
+    ];
+    for (let i = pw.length; i < length; i++) {
+      pw.push(all[Math.floor(Math.random() * all.length)]);
+    }
+    for (let i = pw.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pw[i], pw[j]] = [pw[j], pw[i]];
+    }
+    return pw.join('');
+  }
+
+  const suggestBtn = document.getElementById('suggestBtn');
+  const suggestBox = document.getElementById('suggestBox');
+  const suggestPwText = document.getElementById('suggestPwText');
+  let currentSuggestion = '';
+
+  suggestBtn.addEventListener('click', () => {
+    currentSuggestion = generateStrongPassword();
+    suggestPwText.textContent = currentSuggestion;
+    suggestBox.classList.add('is-visible');
+  });
+
+  document.getElementById('useSuggested').addEventListener('click', () => {
+    suPassword.value = currentSuggestion;
+    document.getElementById('suConfirm').value = currentSuggestion;
+    suPassword.type = 'text';
+    document.querySelector('.pw-show[data-target="suPassword"]').textContent = 'Hide';
+    renderRuleList(suRules, suPassword.value);
+    suggestBox.classList.remove('is-visible');
+  });
+
+  document.getElementById('writeOwn').addEventListener('click', () => {
+    suggestBox.classList.remove('is-visible');
+    suPassword.value = '';
+    document.getElementById('suConfirm').value = '';
+    renderRuleList(suRules, '');
+    suPassword.focus();
+  });
+
+  /* ---- Sign Up ---- */
+  document.getElementById('signupForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    hideMsg();
+    try {
+      const email = document.getElementById('suEmail').value.trim().toLowerCase();
+      const password = suPassword.value;
+      const confirm = document.getElementById('suConfirm').value;
+
+      if (!isGmail(email)) {
+        showMsg('Please sign up with a valid Gmail address (e.g. name@gmail.com).', 'error');
+        return;
+      }
+      if (!passwordIsValid(password)) {
+        showMsg('Password must be at least 8 characters and include a capital letter, a number, and a symbol.', 'error');
+        return;
+      }
+      if (password !== confirm) {
+        showMsg('Passwords do not match.', 'error');
+        return;
+      }
+
+      const accounts = getAccounts();
+      if (accounts[email]) {
+        showMsg('An account with that Gmail address already exists. Try signing in instead.', 'error');
+        return;
+      }
+
+      accounts[email] = { password };
+      saveAccounts(accounts);
+
+      showMsg('Account created successfully! Redirecting you to sign in...', 'success');
+      document.getElementById('signupForm').reset();
+      renderRuleList(suRules, '');
+      suggestBox.classList.remove('is-visible');
+
+      setTimeout(() => {
+        showView('signin');
+        document.getElementById('siEmail').value = email;
+        showMsg('Account created! Enter your password to sign in.', 'success');
+      }, 1400);
+    } catch (err) {
+      console.error('Sign up failed:', err);
+      showMsg('Something went wrong creating the account. Please try again.', 'error');
+    }
+  });
+
+  /* ---- Sign In ---- */
+  document.getElementById('signinForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    hideMsg();
+    try {
+      const email = document.getElementById('siEmail').value.trim().toLowerCase();
+      const password = document.getElementById('siPassword').value;
+
+      if (!isGmail(email)) {
+        showMsg('Please enter a valid Gmail address.', 'error');
+        return;
+      }
+
+      const accounts = getAccounts();
+      const account = accounts[email];
+
+      if (!account || account.password !== password) {
+        showMsg('Incorrect email or password.', 'error');
+        return;
+      }
+
+      showMsg('Login successful! Loading the quiz...', 'success');
+      setTimeout(() => {
+        goToQuizScreen();
+      }, 600);
+    } catch (err) {
+      console.error('Sign in failed:', err);
+      showMsg('Something went wrong signing in. Please try again.', 'error');
+    }
+  });
+
+  /* ---- Forgot Password ---- */
+  document.getElementById('forgotForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    hideMsg();
+    try {
+      const email = document.getElementById('fpEmail').value.trim().toLowerCase();
+      const newPassword = fpPassword.value;
+
+      if (!isGmail(email)) {
+        showMsg('Please enter a valid Gmail address.', 'error');
+        return;
+      }
+      const accounts = getAccounts();
+      if (!accounts[email]) {
+        showMsg('No account found with that Gmail address.', 'error');
+        return;
+      }
+      if (!passwordIsValid(newPassword)) {
+        showMsg('New password must be at least 8 characters and include a capital letter, a number, and a symbol.', 'error');
+        return;
+      }
+
+      accounts[email].password = newPassword;
+      saveAccounts(accounts);
+      showMsg('Password updated! Redirecting you to sign in...', 'success');
+      document.getElementById('forgotForm').reset();
+      renderRuleList(fpRules, '');
+      setTimeout(() => {
+        showView('signin');
+        document.getElementById('siEmail').value = email;
+        showMsg('Password updated! Sign in with your new password.', 'success');
+      }, 1400);
+    } catch (err) {
+      console.error('Password reset failed:', err);
+      showMsg('Something went wrong resetting the password. Please try again.', 'error');
+    }
+  });
+
+  /* ============================================================
+     QUIZ (only starts once the user reaches the quiz screen)
+     ============================================================ */
+  const questionSets = [
+    [
+      { q: "What is the capital of Australia?", options: ["Sydney", "Melbourne", "Canberra", "Perth"], answer: 2 },
+      { q: "Which planet is known as the Red Planet?", options: ["Venus", "Mars", "Jupiter", "Saturn"], answer: 1 },
+      { q: "Who wrote the play 'Romeo and Juliet'?", options: ["Charles Dickens", "William Shakespeare", "Mark Twain", "Leo Tolstoy"], answer: 1 },
+      { q: "What is the largest ocean on Earth?", options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"], answer: 3 },
+      { q: "How many continents are there on Earth?", options: ["5", "6", "7", "8"], answer: 2 },
+      { q: "What gas do plants primarily absorb for photosynthesis?", options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], answer: 2 },
+      { q: "Which country gifted the Statue of Liberty to the USA?", options: ["Spain", "France", "Italy", "United Kingdom"], answer: 1 },
+      { q: "What is the smallest prime number?", options: ["0", "1", "2", "3"], answer: 2 },
+      { q: "Which organ in the human body pumps blood?", options: ["Lungs", "Liver", "Brain", "Heart"], answer: 3 },
+      { q: "What is the chemical symbol for gold?", options: ["Go", "Gd", "Au", "Ag"], answer: 2 }
+    ],
+    [
+      { q: "Which country is home to the Great Barrier Reef?", options: ["Brazil", "Australia", "Indonesia", "Mexico"], answer: 1 },
+      { q: "Who painted the Mona Lisa?", options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"], answer: 2 },
+      { q: "What is the tallest mountain in the world?", options: ["K2", "Kangchenjunga", "Mount Everest", "Lhotse"], answer: 2 },
+      { q: "Which language has the most native speakers worldwide?", options: ["English", "Spanish", "Hindi", "Mandarin Chinese"], answer: 3 },
+      { q: "What is the currency of Japan?", options: ["Won", "Yuan", "Yen", "Ringgit"], answer: 2 },
+      { q: "How many players are on a standard soccer team on the field?", options: ["9", "10", "11", "12"], answer: 2 },
+      { q: "Which gas makes up most of Earth's atmosphere?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Argon"], answer: 2 },
+      { q: "Who is known as the Father of Computers?", options: ["Alan Turing", "Charles Babbage", "John von Neumann", "Ada Lovelace"], answer: 1 },
+      { q: "What is the longest river in the world?", options: ["Amazon River", "Yangtze River", "Mississippi River", "Nile River"], answer: 3 },
+      { q: "Which shape has three sides?", options: ["Square", "Triangle", "Pentagon", "Hexagon"], answer: 1 }
+    ],
+    [
+      { q: "Which country hosted the 2016 Summer Olympics?", options: ["China", "United Kingdom", "Brazil", "Japan"], answer: 2 },
+      { q: "What is the freezing point of water in Celsius?", options: ["0°C", "10°C", "32°C", "100°C"], answer: 0 },
+      { q: "Who wrote 'Pride and Prejudice'?", options: ["Emily Bronte", "Jane Austen", "Virginia Woolf", "Mary Shelley"], answer: 1 },
+      { q: "What is the national sport of Japan?", options: ["Judo", "Karate", "Sumo wrestling", "Kendo"], answer: 2 },
+      { q: "Which planet has the most moons in our solar system?", options: ["Earth", "Mars", "Jupiter", "Saturn"], answer: 3 },
+      { q: "What does 'www' stand for?", options: ["World Wide Web", "World Wide Wire", "Web Wide World", "Wide World Web"], answer: 0 },
+      { q: "Which metal is liquid at room temperature?", options: ["Iron", "Mercury", "Lead", "Zinc"], answer: 1 },
+      { q: "What is the capital city of Canada?", options: ["Toronto", "Vancouver", "Ottawa", "Montreal"], answer: 2 },
+      { q: "How many strings does a standard guitar have?", options: ["4", "5", "6", "7"], answer: 2 },
+      { q: "Which ancient civilization built the pyramids of Giza?", options: ["Romans", "Greeks", "Egyptians", "Mayans"], answer: 2 }
+    ]
+  ];
+
+  const setLabels = ['Set A', 'Set B', 'Set C'];
+  const TIME_PER_QUESTION = 10;
+
+  let activeSetIndex = 0;
+  let questions = [];
+  let currentIndex = 0;
+  let score = 0;
+  let selectedIndex = null;
+  let userAnswers = [];
+  let timeLeft = TIME_PER_QUESTION;
+  let timerInterval = null;
+
+  const qNumber = document.getElementById('qNumber');
+  const qText = document.getElementById('qText');
+  const setLabel = document.getElementById('setLabel');
+  const optionsList = document.getElementById('optionsList');
+  const nextBtn = document.getElementById('nextBtn');
+  const progressLabel = document.getElementById('progressLabel');
+  const scoreLabel = document.getElementById('scoreLabel');
+  const trackFill = document.getElementById('trackFill');
+  const timerFill = document.getElementById('timerFill');
+  const timerNum = document.getElementById('timerNum');
+  const quizArea = document.getElementById('quizArea');
+  const resultArea = document.getElementById('resultArea');
+  const scoreBig = document.getElementById('scoreBig');
+  const accuracyLine = document.getElementById('accuracyLine');
+  const restartBtn = document.getElementById('restartBtn');
+  const reviewList = document.getElementById('reviewList');
+
+  function pickRandomSet() {
+    activeSetIndex = Math.floor(Math.random() * questionSets.length);
+    questions = questionSets[activeSetIndex];
+    userAnswers = new Array(questions.length).fill(null);
+    currentIndex = 0;
+    score = 0;
+    selectedIndex = null;
+    quizArea.style.display = 'block';
+    resultArea.style.display = 'none';
+  }
+
+  function renderQuestion() {
+    selectedIndex = null;
+    const current = questions[currentIndex];
+
+    qNumber.textContent = 'Q' + (currentIndex + 1);
+    setLabel.textContent = setLabels[activeSetIndex] + ' · General Knowledge';
+    qText.textContent = current.q;
+    progressLabel.textContent = 'Question ' + (currentIndex + 1) + ' of ' + questions.length;
+    scoreLabel.textContent = 'Answered: ' + currentIndex;
+    trackFill.style.width = ((currentIndex) / questions.length * 100) + '%';
+
+    optionsList.textContent = '';
+    const letters = ['A', 'B', 'C', 'D'];
+
+    current.options.forEach((optionText, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option js-option';
+      btn.type = 'button';
+
+      const letterSpan = document.createElement('span');
+      letterSpan.className = 'letter';
+      letterSpan.textContent = letters[i];
+
+      const textSpan = document.createElement('span');
+      textSpan.textContent = optionText;
+
+      btn.appendChild(letterSpan);
+      btn.appendChild(textSpan);
+
+      btn.addEventListener('click', () => handleSelect(i, btn));
+      optionsList.appendChild(btn);
+    });
+
+    nextBtn.classList.add('is-visible');
+    nextBtn.textContent = (currentIndex === questions.length - 1) ? 'See Result' : 'Next Question';
+
+    startTimer();
+  }
+
+  function handleSelect(i, clickedBtn) {
+    selectedIndex = i;
+    document.querySelectorAll('.js-option').forEach(btn => btn.classList.remove('is-selected'));
+    clickedBtn.classList.add('is-selected');
+  }
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = TIME_PER_QUESTION;
+    updateTimerDisplay();
+
+    timerInterval = setInterval(() => {
+      timeLeft -= 1;
+      updateTimerDisplay();
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        goToNext();
+      }
+    }, 1000);
+  }
+
+  function updateTimerDisplay() {
+    timerNum.textContent = timeLeft + 's';
+    const pct = (timeLeft / TIME_PER_QUESTION) * 100;
+    timerFill.style.width = pct + '%';
+    timerFill.classList.toggle('is-urgent', timeLeft <= 3);
+  }
+
+  function goToNext() {
+    clearInterval(timerInterval);
+
+    const current = questions[currentIndex];
+    userAnswers[currentIndex] = selectedIndex;
+    if (selectedIndex !== null && selectedIndex === current.answer) {
+      score += 1;
+    }
+
+    document.querySelectorAll('.js-option').forEach(btn => { btn.disabled = true; });
+
+    if (currentIndex < questions.length - 1) {
+      currentIndex += 1;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  nextBtn.addEventListener('click', goToNext);
+
+  function showResult() {
+    clearInterval(timerInterval);
+    quizArea.style.display = 'none';
+    resultArea.style.display = 'block';
+
+    const accuracy = Math.round((score / questions.length) * 100);
+    scoreBig.textContent = score + '/' + questions.length;
+    accuracyLine.textContent = 'Accuracy: ' + accuracy + '%';
+
+    renderReview();
+  }
+
+  function renderReview() {
+    reviewList.textContent = '';
+
+    const title = document.createElement('div');
+    title.className = 'review-title';
+    title.textContent = 'Answer Key';
+    reviewList.appendChild(title);
+
+    const letters = ['A', 'B', 'C', 'D'];
+
+    questions.forEach((current, idx) => {
+      const userChoice = userAnswers[idx];
+      const wasCorrect = userChoice !== null && userChoice === current.answer;
+
+      const item = document.createElement('div');
+      item.className = 'review-item';
+
+      const qLine = document.createElement('p');
+      qLine.className = 'review-q';
+      qLine.textContent = 'Q' + (idx + 1) + '. ' + current.q;
+      item.appendChild(qLine);
+
+      const correctLine = document.createElement('div');
+      correctLine.className = 'review-line answer-key';
+      const correctBadge = document.createElement('span');
+      correctBadge.className = 'tag-badge';
+      correctBadge.textContent = 'Correct';
+      const correctText = document.createElement('span');
+      correctText.textContent = letters[current.answer] + '. ' + current.options[current.answer];
+      correctLine.appendChild(correctBadge);
+      correctLine.appendChild(correctText);
+      item.appendChild(correctLine);
+
+      const yourLine = document.createElement('div');
+      yourLine.className = 'review-line ' + (userChoice === null ? '' : (wasCorrect ? 'correct' : 'wrong'));
+      const yourBadge = document.createElement('span');
+      yourBadge.className = 'tag-badge';
+      yourBadge.textContent = userChoice === null ? 'Skipped' : (wasCorrect ? 'Your pick ✓' : 'Your pick ✗');
+      const yourText = document.createElement('span');
+      yourText.textContent = userChoice === null
+        ? 'No answer selected in time'
+        : letters[userChoice] + '. ' + current.options[userChoice];
+      yourLine.appendChild(yourBadge);
+      yourLine.appendChild(yourText);
+      item.appendChild(yourLine);
+
+      reviewList.appendChild(item);
+    });
+  }
+
+  restartBtn.addEventListener('click', () => {
+    pickRandomSet();
+    renderQuestion();
+  });
+</script>
+</body>
+</html>
